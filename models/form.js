@@ -1,3 +1,7 @@
+const { format } = require('path');
+let crypto = require('crypto')
+const tokenService = require('@services/token.service.js')
+
 module.exports = function(sequelize, DataTypes){
   var Form = sequelize.define('Form', {
     clientId: {
@@ -17,10 +21,31 @@ module.exports = function(sequelize, DataTypes){
       type: DataTypes.STRING,
       field: 'reply_mail'
     },
+    token: {
+      type: DataTypes.STRING,
+      field: 'token'
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      field: 'created_at'
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      field: 'updated_at'
+    }
   }, {
     tableName: 'form',
     timestamps: true
   })
+
+  Form.beforeCreate(async (user, options) => {
+    let token = tokenService.issue()
+    form.token = token
+  });
+
+  Form.prototype.validToken = function(token) {
+    return form.token == token
+  }
 
   Form.associate = function (models) {
     Form.hasMany(models.Content, {

@@ -24,7 +24,11 @@ module.exports = {
       },
       replyMail: {
         type: Sequelize.DataTypes.STRING,
-        field: 'replyMail'
+        field: 'reply_mail'
+      },
+      token: {
+        type: Sequelize.DataTypes.STRING,
+        field: 'token'
       },
       createdAt: {
         type: Sequelize.DataTypes.DATE, field: 'created_at'

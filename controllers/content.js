@@ -1,5 +1,6 @@
 const BaseController = require('@controllers/base.controller.js')
 const Content = require('@models').Content
+const Form = require('@models').Form
 const boom = require('boom')
 
 module.exports = class extends BaseController {
@@ -22,9 +23,27 @@ module.exports = class extends BaseController {
   }
   async createOne(req, reply){
     try {
-      let content = new Content(req.body);
-      let newcontent = await content.save();
-      return newcontent
+      /* const token = req.params.token */
+      let form = await Form.findOne({
+        where: {
+          token: req.params.token
+        }
+      })
+
+      let pattern = form.domainName
+      if (req.headers.host.search(pattern) !== -1){
+        let content = new Content({
+          formId: form.id,
+          content: req.body
+        });
+        let newcontent = await content.save();
+        return newcontent
+      }
+      else {
+        return {
+          msg: 'Cannot submit from this host'
+        }
+      }
     } catch (err) {
       throw boom.boomify(err)
     }

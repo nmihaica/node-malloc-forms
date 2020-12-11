@@ -1,0 +1,23 @@
+{
+  "name": "node-malloc-fomrs",
+  "version": "1.0.0",
+  "main": "server.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon -L --delay 2500ms server.js"
+  },
+  "dependencies": {
+    "bcrypt": "^4.0.1",
+    "bcryptjs": "^2.4.3",
+    "boom": "^7.3.0",
+    "cors": "^2.8.5",
+    "fastify": "^2.14.1",
+    "jsonwebtoken": "^8.5.1",
+    "module-alias": "^2.2.2",
+    "nodemon": "^2.0.3",
+    "pg": "^7.1.2",
+    "pino-pretty": "^4.0.0",
+    "sequelize": "^5.21.6",
+    "sequelize-cli": "^5.5.1"
+  }
+}

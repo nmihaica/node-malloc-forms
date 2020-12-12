@@ -2,6 +2,8 @@ const BaseController = require('@controllers/base.controller.js')
 const Content = require('@models').Content
 const Form = require('@models').Form
 const boom = require('boom')
+const mailService = require('@services/mail.service.js')
+const utils = require('@services/utils.service.js')
 
 module.exports = class extends BaseController {
   async getAll(req, reply){
@@ -32,11 +34,34 @@ module.exports = class extends BaseController {
 
       let pattern = form.domainName
       if (req.headers.host.search(pattern) !== -1){
+        // Submit to database
         let content = new Content({
           formId: form.id,
           content: req.body
         });
         let newcontent = await content.save();
+
+        // Format req.body
+        let html = utils.prepareJSON(JSON.parse(req.body))
+
+        // Send Email
+        let opt = {
+          to: 'placeyouremailhere@gmail.com',
+          subject: `[FORM]` + ` ` + `${form.domainName}`,
+          html: `
+            <p>Form submission</p>
+            ${html}
+          `
+        }
+
+        // Establish new callback
+        let cb = function (error, response) {
+          if (error)
+            console.log(error);
+          else
+            console.log("mail sent");
+        }
+        mailService.sendMail(opt, cb)
         return newcontent
       }
       else {
